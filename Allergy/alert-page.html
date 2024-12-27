@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emergency Alert</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background-color: #fafafa;
+    }
+
+    .alert-container {
+      max-width: 600px;
+      margin: auto;
+      text-align: center;
+      padding-top: 5%;
+    }
+
+    .fa-shield-virus {
+      font-size: 120px;
+      color: #d12323;
+    }
+
+    .alert-button {
+      display: inline-block;
+      margin: 20px auto;
+      padding: 15px 35px;
+      background-color: #d12323;
+      color: white;
+      text-align: center;
+      border-radius: 50px;
+      font-size: 18px;
+      transition: background-color 0.25s ease, transform 0.25s ease;
+      text-decoration: none;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .alert-button:hover {
+      background-color: #a71d1d;
+      transform: scale(1.05);
+    }
+
+    .alert-wrapper {
+      background-color: white;
+      padding: 25px;
+      border-radius: 20px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      margin-top: 20px;
+    }
+
+    .alert-title {
+      font-size: 26px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .alert-body {
+      font-size: 18px;
+      line-height: 1.5;
+      padding-top: 15px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="alert-container">
+    <!-- Alert icon -->
+    <div class="alert-icon">
+      <i class="fas fa-shield-virus"></i>
+    </div>
+    <!-- Informational Wrapper -->
+    <div class="alert-wrapper">
+      <div class="alert-title">
+        Emergency Alert
+      </div>
+      <div class="alert-body">
+        Press the button below to notify nearby users about an emergency situation. Your location will be shared for quick assistance.
+      </div>
+      <!-- Alert trigger button -->
+      <a href="#" class="alert-button">
+        Send Emergency Alert
+      </a>
+    </div>
+  </div>
+  <!-- Insert your script.js file here, or any additional JavaScript below -->
+</body>
+</html>
