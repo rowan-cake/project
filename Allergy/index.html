@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emergency Alert System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #4267B2;
+      --text-color: #1c1e21;
+      --background-color: #e9ebee;
+      --button-hover-color: #365899;
+      --light-gray: #f5f6f7;
+      --box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+      --border-radius: 5px;
+    }
+
+    body, html {
+      height: 100%;
+      margin: 0;
+      background-color: var(--background-color);
+      font-family: 'Roboto', sans-serif;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      padding-top: 50px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      background-color: var(--light-gray);
+      padding: 40px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+    }
+
+    input, button, select {
+      padding: 15px;
+      border: 1px solid #dddfe2;
+      border-radius: var(--border-radius);
+      font-size: 17px;
+    }
+
+    button {
+      background-color: var(--primary-color);
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.25s ease;
+    }
+
+    button:hover {
+      background-color: var(--button-hover-color);
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: var(--text-color);
+      font-weight: 700;
+    }
+
+    .section {
+      display: none;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .alert-button {
+      display: block;
+      width: max-content;
+      margin: auto;
+      padding: 15px 25px;
+      background-color: #FF3B30;
+      color: white;
+      text-align: center;
+      border-radius: var(--border-radius);
+      font-size: 18px;
+      transition: background-color 0.25s ease;
+      text-decoration: none;
+      box-shadow: var(--box-shadow);
+    }
+
+    .alert-button:hover {
+      background-color: #FF2B20;
+    }
+
+    .fa-user-circle {
+      font-size: 100px;
+      color: var(--primary-color);
+      display: block;
+      margin: 40px auto;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding-top: 20px;
+      }
+      h1, h2 {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Welcome to the Emergency Alert System</h1>
+    <form id="signInForm">
+      <input type="email" id="email" placeholder="Enter Email" required>
+      <button type="submit">Sign In</button>
+    </form>
+    <div id="personalDataSection" class="section">
+      <form id="personalDataForm">
+        <h2>Enter Personal Data</h2>
+        <input type="number" id="age" placeholder="Enter Age" required>
+        <input type="number" id="weight" placeholder="Enter Weight" required>
+        <input type="number" id="height" placeholder="Enter Height" required>
+        <select id="gender" required>
+          <option value="">Select Gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+        </select>
+        <button type="submit">Next</button>
+      </form>
+    </div>
+    <div id="contactsSection" class="section">
+      <form id="contactsForm">
+        <h2>Add Emergency Contacts</h2>
+        <input type="text" id="contactName" placeholder="Contact Name" required>
+        <input type="tel" id="contactPhone" placeholder="Contact Phone" required>
+        <button type="button" id="addContact">Add Contact</button>
+        <!-- Redirect button to notify and redirect to another page for alert -->
+        <button type="button" id="continueButton">Continue</button>
+      </form>
+    </div>
+  </div>
+  <div id="userDataDisplay" class="section">
+    <h2>User Data</h2>
+    <div id="userDataContent">
+      
+      
+      <!-- User data will be displayed here -->
+    </div>
+    <button onclick="displayUserData()">Refresh User Data</button>
+    
+  </div>
+  <script src="script.js"></script>
+<script>
+document.getElementById('signInForm').addEventListener('submit', function(event) {
+  event.preventDefault();
+  document.getElementById('signInForm').style.display = "none";
+  document.getElementById('personalDataSection').style.display = "flex";
+});
+
+document.getElementById('personalDataForm').addEventListener('submit', function(event) {
+  event.preventDefault();
+  document.getElementById('personalDataSection').style.display = "none";
+  document.getElementById('contactsSection').style.display = "flex";
+});
+
+document.getElementById('addContact').addEventListener('click', function(event) {
+  // Dummy function for adding emergency contacts, you'll replace it with Twilio API calls or your own logic
+  var name = document.getElementById('contactName').value;
+  var phone = document.getElementById('contactPhone').value;
+
+  // Clear the inputs
+  document.getElementById('contactName').value = '';
+  document.getElementById('contactPhone').value = '';
+
+  // You would store the contacts using Twilio here
+  console.log('Contact added:', name, phone);
+});
+
+document.getElementById('continueButton').addEventListener('click', function(event) {
+  event.preventDefault();
+  // Replace 'alert-page.html' with the actual path to your alert page
+  window.location.href = 'alert-page.html';
+});
+  
+  
+  
+
+  // Call the function to display data right away if needed
+  displayUserData();
+  
+
+// The additional page `alert-page.html` will contain the user circle and the alert button similar to the alertSection in the current HTML
+</script>
+</body>
+</html>
