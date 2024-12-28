@@ -1,8 +1,20 @@
 
-document.getElementById('signInForm').addEventListener('submit', async function(event) {
+function showLogin() {
+  document.getElementById('authButtons').style.display = 'none';
+  document.getElementById('loginForm').style.display = 'flex';
+  document.getElementById('signInForm').style.display = 'none';
+}
+
+function showSignup() {
+  document.getElementById('authButtons').style.display = 'none';
+  document.getElementById('loginForm').style.display = 'none';
+  document.getElementById('signInForm').style.display = 'flex';
+}
+
+document.getElementById('loginForm').addEventListener('submit', async function(event) {
   event.preventDefault();
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
 
   try {
     const response = await fetch('/api/login', {
@@ -13,20 +25,29 @@ document.getElementById('signInForm').addEventListener('submit', async function(
       body: JSON.stringify({ email, password })
     });
 
-    const data = await response.json();
     if (response.ok) {
       localStorage.setItem('email', email);
-      document.getElementById('signInForm').style.display = "none";
-      document.getElementById('personalDataSection').style.display = "flex";
+      window.location.href = 'alert-page.html';
     } else {
-      alert(data.error);
+      alert('Invalid email or password');
     }
   } catch (error) {
     console.error('Error:', error);
+    alert('Login failed. Please try again.');
   }
 });
 
-document.getElementById('personalDataForm').addEventListener('submit', async function(event) {
+document.getElementById('signInForm').addEventListener('submit', function(event) {
+  event.preventDefault();
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  localStorage.setItem('email', email);
+  localStorage.setItem('password', password);
+  document.getElementById('signInForm').style.display = "none";
+  document.getElementById('personalDataSection').style.display = "flex";
+});
+
+document.getElementById('personalDataForm').addEventListener('submit', function(event) {
   event.preventDefault();
   const personalData = {
     age: document.getElementById('age').value,
@@ -42,27 +63,33 @@ document.getElementById('personalDataForm').addEventListener('submit', async fun
 
 let contacts = [];
 
-document.getElementById('addContact').addEventListener('click', function(event) {
-  event.preventDefault();
+document.getElementById('addContact').addEventListener('click', function() {
   const name = document.getElementById('contactName').value;
   const phone = document.getElementById('contactPhone').value;
   
-  contacts.push({name, phone});
-  localStorage.setItem('contacts', JSON.stringify(contacts));
-  
-  document.getElementById('contactName').value = '';
-  document.getElementById('contactPhone').value = '';
+  if (name && phone) {
+    contacts.push({name, phone});
+    localStorage.setItem('contacts', JSON.stringify(contacts));
+    
+    document.getElementById('contactName').value = '';
+    document.getElementById('contactPhone').value = '';
+    console.log('Contact added:', name, phone);
+  }
 });
 
 document.getElementById('continueButton').addEventListener('click', async function(event) {
   event.preventDefault();
   
   try {
+    const email = localStorage.getItem('email');
+    const personalData = JSON.parse(localStorage.getItem('personalData'));
+    const contacts = JSON.parse(localStorage.getItem('contacts')) || [];
+    
     const userData = {
-      email: localStorage.getItem('email'),
-      password: document.getElementById('password').value,
-      personalData: JSON.parse(localStorage.getItem('personalData')),
-      contacts: JSON.parse(localStorage.getItem('contacts'))
+      email,
+      personalData,
+      contacts,
+      createdAt: new Date().toISOString()
     };
     
     const response = await fetch('/api/register', {
@@ -75,7 +102,7 @@ document.getElementById('continueButton').addEventListener('click', async functi
 
     const data = await response.json();
     if (response.ok) {
-      alert('Account created successfully! Redirecting to emergency alert page...');
+      alert('Account created successfully!');
       window.location.href = 'alert-page.html';
     } else {
       alert(data.error);
