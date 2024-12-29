@@ -2,6 +2,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+// Emergency alert handling without Twilio
 const { initializeApp } = require('firebase/app');
 const { getDatabase, ref, set, get, child } = require('firebase/database');
 const { getAnalytics, logEvent } = require('firebase/analytics');
@@ -83,6 +84,36 @@ app.get('/api/users', async (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
+// Send emergency notification
+app.post('/api/send-emergency', async (req, res) => {
+  try {
+    const { email } = req.body;
+    const userId = email.replace(/[.#$\[\]]/g, '_');
+    const userRef = ref(db, 'users/' + userId);
+    const snapshot = await get(userRef);
+    
+    if (snapshot.exists()) {
+      const userData = snapshot.val();
+      const contacts = userData.contacts || [];
+      
+      // Store emergency alert in Firebase
+      const alertRef = ref(db, `alerts/${userId}`);
+      await set(alertRef, {
+        timestamp: new Date().toISOString(),
+        contacts: contacts,
+        status: 'active'
+      });
+      
+      res.json({ message: 'Emergency alert stored successfully' });
+    } else {
+      res.status(404).json({ error: 'User not found' });
+    }
+  } catch (error) {
+    console.error('Error storing emergency alert:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`);
 });

@@ -82,9 +82,47 @@
         Press the button below to notify nearby users about an emergency situation. Your location will be shared for quick assistance.
       </div>
       <!-- Alert trigger button -->
-      <a href="#" class="alert-button">
+      <a href="#" class="alert-button" onclick="sendEmergencyAlert()">
         Send Emergency Alert
       </a>
+      <div id="alertMessages" style="margin-top: 20px;"></div>
+      <script>
+        // Function to handle emergency alert and location sharing
+        async function sendEmergencyAlert() {
+          try {
+            // Retrieve emergency contacts from localStorage
+            const contacts = JSON.parse(localStorage.getItem('contacts')) || [];
+            
+            if (contacts.length > 0) {
+              // Request user's current location
+              const position = await new Promise((resolve, reject) => {
+                navigator.geolocation.getCurrentPosition(resolve, reject);
+              });
+              
+              // Extract coordinates from position object
+              const { latitude, longitude } = position.coords;
+              
+              // Open Apple Maps with location sharing interface
+              // This allows users to share their exact location with emergency contacts
+              window.location.href = `maps://share-location?address=${latitude},${longitude}`;
+            } else {
+              alert('No emergency contacts found');
+            }
+          } catch (error) {
+            // Handle location permission denied error
+            if (error.code === 1) {
+              if (confirm('Location access is required. Open Settings to enable?')) {
+                // Redirect to device settings to enable location
+                window.location.href = 'app-settings:';
+              }
+            } else {
+              // Handle other errors
+              console.error('Error:', error);
+              alert('Unable to access location. Please try again.');
+            }
+          }
+        }
+      </script>
     </div>
   </div>
   <!-- Insert your script.js file here, or any additional JavaScript below -->
